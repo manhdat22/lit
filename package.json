@@ -21,7 +21,7 @@
         "src",
         "public"
       ],
-      "extensions": "js,jsx,html,css"
+      "extensions": "js,jsx,html,css,json"
     }
   },
   "eslintConfig": {
