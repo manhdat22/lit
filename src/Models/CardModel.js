@@ -1,10 +1,9 @@
 /* global chrome */ 
 
-class Card {
+class CardModel{
   // Card cần có tiêu đề, và nếu toàn bộ item trong Card đó done thì completed cũng được chuyển thành done để filter sau này
   constructor(title, completed, show) {
     this.name = 'Card';
-    this.id = getId();
     this.title = title;
     this.completed = completed;
     this.show = show;
@@ -24,15 +23,11 @@ class Card {
 
   //find first
   static find(query) {
-    return Card.where(query)[0];
+    return CardModel.where(query)[0];
   }
   // Instance methods
 
-  create() {
-    chrome.storage.sync.set({"card_1": "1", "card_2": "2", "card_3": "3"}, function () {
-      console.log('Saved');
-    });
-  };
+  create() {};
 
   update() {};
 
@@ -43,8 +38,4 @@ class Card {
   };
 };
 
-function getId(params) {
-  
-}
-
-export default Card;
+export default CardModel;

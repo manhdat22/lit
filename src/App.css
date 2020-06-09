@@ -82,6 +82,10 @@
   text-align: left;
 }
 
+.l-checklist__input {
+  width: 100%;
+}
+
 /* checkbox */
 .c-checkbox {
   display: flex;
