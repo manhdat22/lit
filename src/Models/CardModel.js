@@ -2,23 +2,23 @@
 
 class CardModel{
   // Card cần có tiêu đề, và nếu toàn bộ item trong Card đó done thì completed cũng được chuyển thành done để filter sau này
-  constructor(title, completed, show) {
+  constructor(id, title) {
     this.name = 'Card';
+    this.id = id;
     this.title = title;
-    this.completed = completed;
-    this.show = show;
+    // this.completed = completed;
+    // this.show = show;
   };
   // class methods (static)
   // load toàn bộ dữ liệu
   static all() {
-    return [];
+    chrome.storage.sync.get(this.id, function (data) {
+      console.log(data);
+    });
   }
 
   //where với query
   static where() {
-    chrome.storage.sync.get(["card_1","card_2","card_3"], function (obj) {
-      console.log(obj);
-    });
   }
 
   //find first
@@ -29,9 +29,23 @@ class CardModel{
 
   create() {};
 
-  update() {};
+  save() {
+    let obj = {
+      title: this.title
+    };
+    
+    chrome.storage.sync.set({[this.id]: JSON.stringify(obj)}, function() {
+      chrome.storage.sync.get(this.id, function (data) {
+        console.log(data);
+      });
+    });
+  };
 
-  delete() {};
+  delete() {
+    chrome.storage.sync.get(function(Items) {
+      chrome.storage.sync.remove(Object.keys(Items))
+    });
+  };
 
   toggle() {
     this.show = !this.show;

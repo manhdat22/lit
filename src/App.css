@@ -72,6 +72,10 @@
   font-weight: bold;
 }
 
+.c-card__input {
+  width: 100%;
+}
+
 /* checklist */
 .l-checklist {
   padding-inline-start: 0;
