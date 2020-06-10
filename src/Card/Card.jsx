@@ -1,39 +1,78 @@
-import React from 'react';
-import CardModel from "../Models/CardModel"
-import Items from "../Item/Items"
+/* global chrome */ 
 
-class Item extends React.Component {
+import React from 'react';
+import ItemList from "../Item/ItemList"
+
+class Card extends React.Component {
   constructor(props) {
     super(props);
-
+    
     this.state = {
-      id: "1", 
+      id: this.props.id, 
       title: this.props.title,
       completed: false,
       opened: false
     };
   };
 
-  changeHandler = event => {
-    const target = event.target;
-    const name = target.name;
-    const value = target.type === 'checkbox' ? target.checked : target.value;
+  handleChange = event => {
+    this.setState({title: event.target.value});
+  };
 
-    this.setState({
-      [name]: value
+  handleKeyPress = event => {
+    if(event.key === 'Enter') this.closeInput();
+  };
+ 
+  update = () => {
+    let obj = {
+      title: this.state.title
+    };
+    
+    chrome.storage.sync.set({[this.state.id]: JSON.stringify(obj)}, function() {
+      chrome.storage.sync.get(function (data) {
+        console.log(data);
+      });
     });
   };
 
+  openInput = () => {
+    if(this.state.opened) return;
+    this.setState({opened: true});
+  };
+
+  closeInput = () => {
+    if(!this.state.opened) return;
+    this.setState({opened: false});
+    this.update();
+  };
+
   render() {
+    let cardTitleInput = (
+      <input 
+        autoFocus
+        type="input"
+        name="title"
+        className="c-card__input"
+        value={this.state.title}
+        onBlur={this.closeInput}
+        onKeyPress={this.handleKeyPress}
+        onChange={this.handleChange}
+      />
+    );
+
+    let cardTitle = (
+      <p className="c-card__title" onClick={this.openInput}>{this.state.title}</p>
+    );
+
     return(
       <>
         <div className="c-card">
           <div className="c-card__header">
-            <p className="c-card__title">{this.state.title}</p>
+            {(this.state.opened) ? cardTitleInput : cardTitle}
           </div>
           <div className="c-card__body">
             <div className="c-card__body">
-              <Items cardId={this.state.id}/>
+              <ItemList cardId={this.state.id}/>
             </div>
           </div>
         </div>
@@ -44,4 +83,4 @@ class Item extends React.Component {
   };
 };
 
-export default Item;
+export default Card;

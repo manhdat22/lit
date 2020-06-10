@@ -8,21 +8,19 @@ class Items extends React.Component {
     this.state = {cardId: this.props.cardId};
   };
 
+  static itemList = (cardId) => {
+    return ["1","2","3","4","5","6"]
+  };
+
   render() {
     return (
       <ul className="l-checklist">
-        {
-          itemList(this.state.cardId).map(i => (
-            <Item key={i} content={i}/>
-          ))
-        }
+        {Items.itemList(this.state.cardId).map(i => (
+          <Item key={i} content={i}/>
+        ))}
       </ul>
     );
   };
-};
-
-const itemList = (cardId) => {
-  return ["1","2","3","4","5","6"]
 };
 
 export default Items;

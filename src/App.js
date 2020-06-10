@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import Cards from './Card/Cards';
+import CardList from './Card/CardList';
 
 function App() {
   return (
@@ -12,7 +12,7 @@ function App() {
       <div className="c-seperator"></div>
 
       <section className="l-body">
-        <Cards />
+        <CardList />
       </section>
     </div>
   );

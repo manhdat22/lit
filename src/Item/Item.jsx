@@ -12,7 +12,7 @@ class Item extends React.Component {
     };
   };
 
-  changeHandler = event => {
+  handleChange = event => {
     const target = event.target;
     const name = target.name;
     const value = target.type === 'checkbox' ? target.checked : target.value;
@@ -41,7 +41,7 @@ class Item extends React.Component {
         className="l-checklist__input"
         value={this.state.content}
         onBlur={this.closeInput}
-        onChange={this.changeHandler}
+        onChange={this.handleChange}
       />
     );
 
@@ -51,7 +51,7 @@ class Item extends React.Component {
           id="option_1"
           type="checkbox"
           name="completed"
-          onChange={this.changeHandler} 
+          onChange={this.handleChange} 
           className="c-checkbox__input"
         />
         <label className="c-checkbox__label">{this.state.content}</label>
