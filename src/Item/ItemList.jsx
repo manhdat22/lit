@@ -1,25 +1,40 @@
+/* global chrome */ 
+
 import React from 'react';
 import Item from './Item.jsx';
-import ItemModel from '../Models/ItemModel';
 
 class Items extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {cardId: this.props.cardId};
+    this.state = { itemList: null };
   };
-
-  static itemList = (cardId) => {
-    return ["1","2","3","4","5","6"]
-  };
+  
+  componentDidMount() {
+    chrome.storage.sync.get(function (obj) {
+      let data = Object.keys(obj).map((key) => {
+        let id = {id: key}
+        let data = JSON.parse(obj[key])
+        
+        return (data.type === 'item' && data.cardID === this.props.cardID)
+          ? {...id, ...data} 
+          : null;
+      }).filter((item) => {return item != null});
+      
+      this.setState({itemList: data});
+    }.bind(this));
+  }
 
   render() {
-    return (
-      <ul className="l-checklist">
-        {Items.itemList(this.state.cardId).map(i => (
-          <Item key={i} content={i}/>
-        ))}
-      </ul>
-    );
+    if (this.state.itemList) {
+      return (
+        <ul className="l-checklist">
+          {this.state.itemList.map(item => (
+            <Item key={item} cardID={item.cardID} id={item.id} content={item.content}/>
+          ))}
+        </ul>
+      );
+    }
+    return (<span>Loading...</span>)
   };
 };
 
