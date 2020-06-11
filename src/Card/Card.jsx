@@ -25,6 +25,7 @@ class Card extends React.Component {
  
   update = () => {
     let obj = {
+      type: 'card',
       title: this.state.title
     };
     
@@ -46,8 +47,8 @@ class Card extends React.Component {
     this.update();
   };
 
-  render() {
-    let cardTitleInput = (
+  renderCardTitleInput = () => {
+    return (
       <input 
         autoFocus
         type="input"
@@ -58,21 +59,25 @@ class Card extends React.Component {
         onKeyPress={this.handleKeyPress}
         onChange={this.handleChange}
       />
-    );
-
-    let cardTitle = (
+    )
+  };
+    
+  renderCardTitle = () => {
+    return (
       <p className="c-card__title" onClick={this.openInput}>{this.state.title}</p>
-    );
-
+    )
+  ;}
+      
+  render() {
     return(
       <>
         <div className="c-card">
           <div className="c-card__header">
-            {(this.state.opened) ? cardTitleInput : cardTitle}
+            {(this.state.opened) ? this.renderCardTitleInput() : this.renderCardTitle()}
           </div>
           <div className="c-card__body">
             <div className="c-card__body">
-              <ItemList cardId={this.state.id}/>
+              <ItemList cardId={this.props.id}/>
             </div>
           </div>
         </div>

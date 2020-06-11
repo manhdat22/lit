@@ -6,9 +6,7 @@ import Card from './Card';
 class Cards extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      cardList: null
-    };
+    this.state = { cardList: null };
   };
 
   componentDidMount() {
@@ -16,14 +14,16 @@ class Cards extends React.Component {
       let data = Object.keys(obj).map((key) => {
         let id = {id: key}
         let data = JSON.parse(obj[key])
-        return {...id, ...data}
-      });
+        
+        return (data.type === 'card') ? {...id, ...data} : null;
+      }).filter((card) => {return card != null});
       
-      this.setState({cardList: data});
+      this.setState({cardList: data})
     }.bind(this));
   }
 
   render() {
+    console.log(this.state.cardList);
     if (this.state.cardList) {
       return (
         <>

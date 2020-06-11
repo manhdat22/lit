@@ -1,11 +1,14 @@
+/* global chrome */ 
+
 import React from 'react';
-import ItemModel from "../Models/ItemModel"
 
 class Item extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
+      id: this.props.id,
+      cardId: this.props.cardId,
       content: this.props.content,
       completed: false,
       opened: false
@@ -30,6 +33,26 @@ class Item extends React.Component {
   closeInput = () => {
     if(!this.state.opened) return;
     this.setState({opened: false});
+    this.update();
+  };
+
+  handleKeyPress = event => {
+    if(event.key === 'Enter') this.closeInput();
+  };
+
+  update = () => {
+    let obj = {
+      type: 'item',
+      cardId: this.props.cardId,
+      content: this.state.content,
+      completed: this.state.completed
+    };
+    
+    chrome.storage.sync.set({[this.state.id]: JSON.stringify(obj)}, function() {
+      chrome.storage.sync.get(function (data) {
+        console.log(data);
+      });
+    });
   };
 
   render() { 
