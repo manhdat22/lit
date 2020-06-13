@@ -1,4 +1,4 @@
-/* global chrome */ 
+/* global chrome */
 
 import React from 'react';
 import ItemList from "../Item/ItemList"
@@ -6,9 +6,9 @@ import ItemList from "../Item/ItemList"
 class Card extends React.Component {
   constructor(props) {
     super(props);
-    
+
     this.state = {
-      id: this.props.id, 
+      id: this.props.id,
       title: this.props.title,
       completed: false,
       opened: false
@@ -22,13 +22,13 @@ class Card extends React.Component {
   handleKeyPress = event => {
     if(event.key === 'Enter') this.closeInput();
   };
- 
+
   update = () => {
     let obj = {
       type: 'card',
       title: this.state.title
     };
-    
+
     chrome.storage.sync.set({[this.state.id]: JSON.stringify(obj)}, function() {
       chrome.storage.sync.get(function (data) {
         console.log(data);
@@ -47,45 +47,39 @@ class Card extends React.Component {
     this.update();
   };
 
-  renderCardTitleInput = () => {
-    return (
-      <input 
-        autoFocus
-        type="input"
-        name="title"
-        className="c-card__input"
-        value={this.state.title}
-        onBlur={this.closeInput}
-        onKeyPress={this.handleKeyPress}
-        onChange={this.handleChange}
-      />
-    )
-  };
-    
-  renderCardTitle = () => {
-    return (
-      <p className="c-card__title" onClick={this.openInput}>{this.state.title}</p>
-    )
-  ;}
-      
-  render() {
-    return(
-      <>
-        <div className="c-card">
-          <div className="c-card__header">
-            {(this.state.opened) ? this.renderCardTitleInput() : this.renderCardTitle()}
-          </div>
+  renderCardTitleInput = () => (
+    <input
+      autoFocus
+      type="input"
+      name="title"
+      className="c-card__input"
+      value={this.state.title}
+      onBlur={this.closeInput}
+      onKeyPress={this.handleKeyPress}
+      onChange={this.handleChange}
+    />
+  )
+
+  renderCardTitle = () => (
+    <p className="c-card__title" onClick={this.openInput}>{this.state.title}</p>
+  )
+
+  render= () => (
+    <>
+      <div className="c-card">
+        <div className="c-card__header">
+          {(this.state.opened) ? this.renderCardTitleInput() : this.renderCardTitle()}
+        </div>
+        <div className="c-card__body">
           <div className="c-card__body">
-            <div className="c-card__body">
-              <ItemList cardId={this.props.id}/>
-            </div>
+            <ItemList cardId={this.props.id} />
           </div>
         </div>
+      </div>
 
-        <div className="c-seperator"></div>
-      </>
-    );
-  };
+      <div className="c-seperator"></div>
+    </>
+  );
 };
 
 export default Card;

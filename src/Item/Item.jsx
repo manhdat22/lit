@@ -1,4 +1,4 @@
-/* global chrome */ 
+/* global chrome */
 
 import React from 'react';
 
@@ -6,23 +6,41 @@ class Item extends React.Component {
   constructor(props) {
     super(props);
 
+    const item = this.props.item;
     this.state = {
-      id: this.props.id,
-      cardId: this.props.cardId,
-      content: this.props.content,
-      completed: false,
+      id: item.id,
+      cardId: item.cardId,
+      content: item.content,
+      completed: item.completed,
       opened: false
     };
   };
 
-  handleChange = event => {
-    const target = event.target;
-    const name = target.name;
-    const value = target.type === 'checkbox' ? target.checked : target.value;
+  componentDidUpdate = (_, prevState) => {
+    if(prevState.completed !== this.state.completed) this.save()
+  }
 
-    this.setState({
-      [name]: value
+  save = () => {
+    let obj = {
+      type: 'item',
+      cardId: this.props.cardId,
+      content: this.state.content,
+      completed: this.state.completed
+    };
+
+    chrome.storage.sync.set({[this.state.id]: JSON.stringify(obj)}, function() {
+      chrome.storage.sync.get(function (data) {
+        console.log(data);
+      });
     });
+  };
+
+  handleClickCheckbox = event => {
+    this.setState({completed: event.target.checked});
+  };
+
+  handleChange = event => {
+    this.setState({content: event.target.value});
   };
 
   openInput = () => {
@@ -33,31 +51,17 @@ class Item extends React.Component {
   closeInput = () => {
     if(!this.state.opened) return;
     this.setState({opened: false});
-    this.update();
+
+    this.save();
   };
 
   handleKeyPress = event => {
     if(event.key === 'Enter') this.closeInput();
   };
 
-  update = () => {
-    let obj = {
-      type: 'item',
-      cardId: this.props.cardId,
-      content: this.state.content,
-      completed: this.state.completed
-    };
-    
-    chrome.storage.sync.set({[this.state.id]: JSON.stringify(obj)}, function() {
-      chrome.storage.sync.get(function (data) {
-        console.log(data);
-      });
-    });
-  };
-
-  render() { 
-    let itemInput = (
-      <input 
+  renderItemInput = () => {
+    return (
+      <input
         autoFocus
         type="input"
         name="content"
@@ -65,25 +69,31 @@ class Item extends React.Component {
         value={this.state.content}
         onBlur={this.closeInput}
         onChange={this.handleChange}
+        onKeyPress={this.handleKeyPress}
       />
     );
+  };
 
-    let itemContent = (
+  renderItemContent = () => {
+    return (
       <div className="c-checkbox">
         <input
           id="option_1"
           type="checkbox"
           name="completed"
-          onChange={this.handleChange} 
           className="c-checkbox__input"
+          checked={this.state.completed}
+          onChange={this.handleClickCheckbox}
         />
-        <label className="c-checkbox__label">{this.state.content}</label>
+        <label className="c-checkbox__label" onClick={this.openInput}>{this.state.content}</label>
       </div>
-    );
+    )
+  };
 
+  render() {
     return(
-      <li className="l-checklist__item" onClick={this.openInput}>
-        {(this.state.opened) ? itemInput : itemContent}
+      <li className="l-checklist__item">
+        {(this.state.opened) ? this.renderItemInput() : this.renderItemContent()}
       </li>
     );
   };

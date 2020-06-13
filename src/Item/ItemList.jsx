@@ -1,35 +1,34 @@
-/* global chrome */ 
+/* global chrome */
 
 import React from 'react';
 import Item from './Item.jsx';
 
-class Items extends React.Component {
+class ItemList extends React.Component {
   constructor(props) {
     super(props);
     this.state = { itemList: null };
   };
-  
+
   componentDidMount() {
     chrome.storage.sync.get(function (obj) {
-      let data = Object.keys(obj).map((key) => {
-        let id = {id: key}
-        let data = JSON.parse(obj[key])
-        
-        return (data.type === 'item' && data.cardID === this.props.cardID)
-          ? {...id, ...data} 
-          : null;
-      }).filter((item) => {return item != null});
-      
-      this.setState({itemList: data});
+      var itemList = [];
+      Object.keys(obj).forEach((key) => {
+        const id = {id: key}
+        const data = JSON.parse(obj[key])
+        if (data.type === 'item' && data.cardID === this.props.cardID) {
+          itemList.push({...id, ...data})
+        };
+      });
+      this.setState({itemList: itemList});
     }.bind(this));
-  }
+  };
 
-  render() {
+  render = () => {
     if (this.state.itemList) {
       return (
         <ul className="l-checklist">
           {this.state.itemList.map(item => (
-            <Item key={item} cardID={item.cardID} id={item.id} content={item.content}/>
+            <Item key={item} item={item} />
           ))}
         </ul>
       );
@@ -38,4 +37,4 @@ class Items extends React.Component {
   };
 };
 
-export default Items;
+export default ItemList;
