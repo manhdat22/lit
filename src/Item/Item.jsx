@@ -59,44 +59,39 @@ class Item extends React.Component {
     if(event.key === 'Enter') this.closeInput();
   };
 
-  renderItemInput = () => {
-    return (
+  renderItemInput = () => (
+    <input
+      autoFocus
+      type="input"
+      name="content"
+      className="l-checklist__input"
+      value={this.state.content}
+      onBlur={this.closeInput}
+      onChange={this.handleChange}
+      onKeyPress={this.handleKeyPress}
+    />
+  );
+
+  renderItemContent = () => (
+    <div className="c-checkbox">
       <input
-        autoFocus
-        type="input"
-        name="content"
-        className="l-checklist__input"
-        value={this.state.content}
-        onBlur={this.closeInput}
-        onChange={this.handleChange}
-        onKeyPress={this.handleKeyPress}
+        id="option_1"
+        type="checkbox"
+        name="completed"
+        className="c-checkbox__input"
+        checked={this.state.completed}
+        onChange={this.handleClickCheckbox}
       />
-    );
-  };
+      <label className="c-checkbox__label" onClick={this.openInput}>{this.state.content}</label>
+    </div>
+  );
 
-  renderItemContent = () => {
-    return (
-      <div className="c-checkbox">
-        <input
-          id="option_1"
-          type="checkbox"
-          name="completed"
-          className="c-checkbox__input"
-          checked={this.state.completed}
-          onChange={this.handleClickCheckbox}
-        />
-        <label className="c-checkbox__label" onClick={this.openInput}>{this.state.content}</label>
-      </div>
-    )
-  };
 
-  render() {
-    return(
-      <li className="l-checklist__item">
-        {(this.state.opened) ? this.renderItemInput() : this.renderItemContent()}
-      </li>
-    );
-  };
+  render = () => (
+    <li className="l-checklist__item">
+      {(this.state.opened) ? this.renderItemInput() : this.renderItemContent()}
+    </li>
+  );
 };
 
 export default Item;

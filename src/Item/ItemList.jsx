@@ -9,7 +9,7 @@ class ItemList extends React.Component {
     this.state = { itemList: null };
   };
 
-  componentDidMount() {
+  componentDidMount = () => {
     chrome.storage.sync.get(function (obj) {
       var itemList = [];
       Object.keys(obj).forEach((key) => {
@@ -19,6 +19,7 @@ class ItemList extends React.Component {
           itemList.push({...id, ...data})
         };
       });
+
       this.setState({itemList: itemList});
     }.bind(this));
   };
