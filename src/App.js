@@ -7,19 +7,28 @@ class App extends React.Component {
     this.state = {addNewCard: false};
   }
 
-  render = () => (
-    <div className="App">
-      <header className="l-header">
-        <p className="l-header__title">#Lít</p>
-        <button className="l-header__add-button" onClick={() => this.setState({addNewCard: true})}>+</button>
-      </header>
-      <div className="c-seperator"></div>
+  closeInput = () => {
+    this.setState({addNewCard: false});
+    window.location.reload(false);
+  }
 
-      <section className="l-body">
-        <CardList addNewCard={this.state.addNewCard} />
-      </section>
-    </div>
-  );
+  render = () => {
+    console.log(this.state.addNewCard);
+
+    return (
+      <div className="App">
+        <header className="l-header">
+          <p className="l-header__title">#Lít</p>
+          <button className="l-header__add-button" onClick={() => this.setState({addNewCard: true})}>+</button>
+        </header>
+        <div className="c-seperator"></div>
+
+        <section className="l-body">
+          <CardList addNewCard={this.state.addNewCard} closeInput={this.closeInput}/>
+        </section>
+      </div>
+    )
+  };
 };
 
 export default App;

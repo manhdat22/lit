@@ -1,6 +1,7 @@
 /* global chrome */
 
 import React from 'react';
+import _ from 'lodash';
 import Item from './Item.jsx';
 
 class ItemList extends React.Component {
@@ -20,7 +21,7 @@ class ItemList extends React.Component {
         };
       });
 
-      this.setState({itemList: itemList});
+      this.setState({itemList: _.orderBy(itemList, 'createdAt', 'desc')});
     }.bind(this));
   };
 
