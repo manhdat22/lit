@@ -7,6 +7,8 @@ class Card extends React.Component {
   constructor(props) {
     super(props);
 
+    console.log(this.props.id);
+
     this.state = {
       id: this.props.id,
       title: this.props.title,

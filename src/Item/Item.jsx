@@ -30,7 +30,7 @@ class Item extends React.Component {
 
     chrome.storage.sync.set({[this.state.id]: JSON.stringify(obj)}, function() {
       chrome.storage.sync.get(function (data) {
-        console.log(data);
+        // console.log(data);
       });
     });
   };
@@ -41,6 +41,7 @@ class Item extends React.Component {
 
   handleChange = event => {
     this.setState({content: event.target.value});
+    this.autoGrow(event);
   };
 
   openInput = () => {
@@ -55,27 +56,40 @@ class Item extends React.Component {
     this.save();
   };
 
+  autoGrow = event => {
+    console.log(1);
+
+    const element = event.target
+    element.style.height = "5px";
+    element.style.height = (element.scrollHeight)+"px";
+  }
+
   handleKeyPress = event => {
     if(event.key === 'Enter') this.closeInput();
   };
 
   renderItemInput = () => (
-    <input
-      autoFocus
-      type="input"
-      name="content"
-      className="l-checklist__input"
-      value={this.state.content}
-      onBlur={this.closeInput}
-      onChange={this.handleChange}
-      onKeyPress={this.handleKeyPress}
-    />
+    <div className="c-checkbox">
+      <input type="checkbox" checked={this.state.completed} className="c-checkbox__input" />
+      <textarea
+        autoFocus
+        type="input"
+        name="content"
+        className="l-checklist__input"
+        value={this.state.content}
+        onBlur={this.closeInput}
+        onFocus={this.autoGrow}
+        onChange={this.handleChange}
+        onKeyPress={this.handleKeyPress}>
+      </textarea>
+    </div>
+
   );
 
   renderItemContent = () => (
     <div className="c-checkbox">
       <input
-        id="option_1"
+        id={this.props.item.id}
         type="checkbox"
         name="completed"
         className="c-checkbox__input"
@@ -85,7 +99,6 @@ class Item extends React.Component {
       <label className="c-checkbox__label" onClick={this.openInput}>{this.state.content}</label>
     </div>
   );
-
 
   render = () => (
     <li className="l-checklist__item">

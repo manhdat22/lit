@@ -16,7 +16,7 @@ class ItemList extends React.Component {
       Object.keys(obj).forEach((key) => {
         const id = {id: key}
         const data = JSON.parse(obj[key])
-        if (data.type === 'item' && data.cardID === this.props.cardID) {
+        if (data.type === 'item' && data.cardId === this.props.cardId) {
           itemList.push({...id, ...data})
         };
       });
