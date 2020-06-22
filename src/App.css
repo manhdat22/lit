@@ -9,8 +9,11 @@
   --text-color: #bbbbbb;
 }
 
+button:focus, input:focus , textarea:focus {
+  outline: none;
+}
+
 .App {
-  /* text-align: center; */
   height: calc(100vh - 2*var(--main-padding));
   background-color: var(--bg-color);
   padding: var(--main-padding);
@@ -35,16 +38,21 @@
 }
 
 .l-header__add-button{
+  cursor: pointer;
   margin-left: auto;
-  width: 3em;
+  width: 40px;
   background-color: var(--secondary-color);
   color: var(--text-color);
   border: none;
   text-align: center;
   text-decoration: none;
   display: inline-block;
-  font-size: 17px;
+  font-size: 14px;
   border-radius: 3px;
+}
+
+.l-header__add-button:hover{
+  color: #ffffff;
 }
 
 /* body layout */
@@ -58,10 +66,29 @@
 /* card */
 .c-card {
   display: block;
+  padding-top: var(--main-padding);
+}
+
+.c-card:hover .c-card__buttons {
+  visibility: visible;
+}
+
+.c-checkbox:hover .c-checkbox__buttons {
+  visibility: visible;
+}
+
+.c-card:hover .c-seperator {
+  border-color: var(--primary-color);
 }
 
 .c-card__header {
-  display: block;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: left;
+  font-size: var(--font-size);
+  color: var(--primary-color);
+  font-weight: bold;
 }
 
 .c-card__title {
@@ -70,6 +97,36 @@
   color: var(--text-color);
   font-weight: bold;
   overflow-wrap: break-word;
+  width: 85%;
+  max-width: 85%;
+}
+
+.c-card__buttons, .c-checkbox__buttons {
+  visibility: hidden;
+  margin-left: auto;
+}
+
+.c-card__button-delete, .c-card__button-add, .c-checkbox__button-delete {
+  cursor: pointer;
+  background-color: var(--secondary-color);
+  color: var(--text-color);
+  border: none;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  border-radius: 3px;
+  margin-left: 8px;
+  padding: 0px 4px;
+}
+
+.c-card__button-delete:hover, .c-checkbox__button-delete:hover {
+  background-color: #f95451;
+  color: #ffffff;
+}
+
+.c-card__button-add:hover {
+  color: #ffffff;
 }
 
 .c-card__input {
@@ -86,9 +143,14 @@
   overflow-wrap: break-word;
   resize: none;
   font-size: inherit;
-  font-weight: bold;
   font-family: inherit;
+  font-weight: 700;
   padding: 0;
+  max-width: 85%;
+}
+
+.c-card__input:focus {
+  outline: none;
 }
 
 /* checklist */
@@ -169,10 +231,17 @@
   overflow: hidden;
   overflow-wrap: break-word;
 }
+
+.c-checkbox__label.completed {
+  text-decoration: line-through;
+}
 /* misc */
 .c-seperator {
   display: block;
   border-bottom: 1px solid var(--secondary-color);
-  margin-bottom: var(--main-padding);
   width: 100%;
+}
+
+.editing {
+  border-color: var(--primary-color);
 }

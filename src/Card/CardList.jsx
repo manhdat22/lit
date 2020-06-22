@@ -7,7 +7,10 @@ import Card from './Card';
 class CardList extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { cardList: null };
+    this.state = {
+      cardList: null,
+      reload: false
+    };
   };
 
   generateId = () => {
@@ -15,24 +18,22 @@ class CardList extends React.Component {
   };
 
   save = event => {
+    if (_.isEmpty(event.target.value)) {
+      this.props.closeInput();
+      return;
+    }
     const obj = {
       type: "card",
       title: event.target.value,
       createdAt: Date.now(),
       completed: false
     };
-
-    chrome.storage.sync.set({[this.generateId()]: JSON.stringify(obj)}, function () {
-      chrome.storage.sync.get(function (data) {
-        console.log(data);
-      });
-    });
-
+    chrome.storage.sync.set({[this.generateId()]: JSON.stringify(obj)});
     this.props.closeInput();
   }
 
   componentDidMount = () => {
-    chrome.storage.sync.get(function (obj) {
+    chrome.storage.sync.get((obj) => {
       var cardList = [];
       Object.keys(obj).forEach((key) => {
         const id = {id: key}
@@ -40,12 +41,62 @@ class CardList extends React.Component {
         if (data.type === 'card') cardList.push({...id, ...data});
       });
 
-      this.setState({cardList: _.orderBy(cardList, 'createdAt', 'desc')});
-    }.bind(this));
+      this.setState({cardList: _.orderBy(cardList, 'createdAt', 'asc')});
+    })
+  };
+
+  initInput = event => {
+    let val = event.target.value;
+    event.target.value = ""
+    event.target.value = val;
+    this.autoGrow(event);
+  }
+
+  autoGrow = event => {
+    const element = event.target
+    element.style.height = "5px";
+    element.style.height = (element.scrollHeight)+"px";
+  };
+
+  handleChange = event => {
+    this.setState({title: event.target.value});
+    this.autoGrow(event);
+  };
+
+  handleKeyPress = event => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      this.save(event);
+    }
+  };
+
+  handleBlur = event => {
+    this.save(event);
   };
 
   renderNewCard = () => {
-
+    return (
+      <>
+        <div className="c-card">
+          <div className="c-card__header">
+            <textarea
+              autoFocus
+              name="title"
+              className="c-card__input"
+              defaultValue="Checklist"
+              onBlur={this.handleBlur}
+              onKeyPress={this.handleKeyPress}
+              onChange={this.handleChange}
+              onFocus={this.initInput}>
+            </textarea>
+          </div>
+          <div className="c-card__body">
+            <ul class="l-checklist"></ul>
+          </div>
+        <div className="c-seperator editing"></div>
+        </div>
+      </>
+    )
   }
 
   render = () => {
@@ -54,23 +105,10 @@ class CardList extends React.Component {
     return (
       <>
         {this.state.cardList.map(card => (
-          <Card key={card.id} id={card.id} title={card.title} />
+          <Card key={card.id} card={card} />
         ))}
 
-        {this.props.addNewCard && (
-          <>
-            <textarea autoFocus onBlur={this.save}></textarea>
-            <input
-              type="input"
-              name="content"
-              className="l-checklist__input"
-              // value={this.state.content}
-              // onBlur={this.closeInput}
-              // onChange={this.handleChange}
-              // onKeyPress={this.handleKeyPress}
-            />
-          </>
-        )}
+        {this.props.newCard && this.renderNewCard()}
       </>
     );
   };

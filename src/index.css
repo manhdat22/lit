@@ -8,6 +8,7 @@ body {
   width: 400px;
   height: 600px;
   font-size: 14px;
+  background-color: var(--bg-color);
 }
 
 code {

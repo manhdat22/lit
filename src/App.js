@@ -4,27 +4,25 @@ import CardList from './Card/CardList';
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {addNewCard: false};
+    this.state = {newCard: false};
   }
 
   closeInput = () => {
-    this.setState({addNewCard: false});
+    this.setState({newCard: false});
     window.location.reload(false);
   }
 
   render = () => {
-    console.log(this.state.addNewCard);
-
     return (
       <div className="App">
         <header className="l-header">
           <p className="l-header__title">#Lít</p>
-          <button className="l-header__add-button" onClick={() => this.setState({addNewCard: true})}>+</button>
+          <button className="l-header__add-button" onClick={() => this.setState({newCard: true})}>+</button>
         </header>
         <div className="c-seperator"></div>
 
         <section className="l-body">
-          <CardList addNewCard={this.state.addNewCard} closeInput={this.closeInput}/>
+          <CardList newCard={this.state.newCard} closeInput={this.closeInput} />
         </section>
       </div>
     )
