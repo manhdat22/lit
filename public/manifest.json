@@ -4,6 +4,7 @@
   "name": "Lít",
   "description": "My personal TODO app",
   "version": "0.0.1",
+  "key": "fheiblbgiclbiomealpofdckfiafiodf",
 
   "browser_action": {
     "default_popup": "index.html",
