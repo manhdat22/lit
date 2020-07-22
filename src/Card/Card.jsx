@@ -61,11 +61,7 @@ class Card extends React.Component {
       createdAt: this.props.card.createdAt
     };
 
-    chrome.storage.sync.set({[this.props.card.id]: JSON.stringify(obj)}, function() {
-      chrome.storage.sync.get(function (data) {
-        console.log(data);
-      });
-    });
+    chrome.storage.sync.set({[this.props.card.id]: JSON.stringify(obj)}, function() {});
   };
 
   openInput = () => {
