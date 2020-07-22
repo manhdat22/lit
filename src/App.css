@@ -164,8 +164,8 @@ button:focus, input:focus , textarea:focus {
 }
 
 .l-checklist__input {
-  width: 85%;
-  max-width: 85%;
+  width: 84%;
+  max-width: 84%;
   box-sizing: border-box;
   margin-left: 1em;
   border-color: inherit;
