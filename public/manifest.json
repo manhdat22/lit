@@ -10,8 +10,8 @@
     "default_title": "Show me the magic"
   },
   "icons": {
-    "16": "logo192.png",
-    "48": "logo512.png"
+    "16": "logo.png",
+    "48": "logo.png"
   },
   "permissions": [
     "storage"
